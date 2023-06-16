@@ -1,7 +1,12 @@
+import requests
 from flask import Flask, request, Response
 from query import get_company_information
 from query_wallapop import get_wallapop
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 app = Flask(__name__)
 
 
@@ -9,6 +14,16 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello World!'
 
+@app.route('/api/telegram')
+def send_tg_message():
+    token = os.getenv('TELEGRAM_BOT_TOKEN')
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    r = requests.post(url=url, data={
+        "chat_id": "-644321173",
+        "text": "Soy el bot viajando a la nube"
+    })
+
+    return r.json()
 
 @app.route('/api/yahoo')
 def get_company():
